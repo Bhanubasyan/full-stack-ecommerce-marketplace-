@@ -26,11 +26,13 @@ app.use(cookieParser()); // Parse cookies
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://full-stack-ecommerce-marketplace.vercel.app",
+    ],
     credentials: true,
   })
 );
-
 app.use("/api/cart", cartRoutes);
 
 app.use("/api/products", productRoutes);
