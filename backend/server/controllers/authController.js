@@ -69,7 +69,9 @@ exports.loginUser = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
+if (user.role !== role) {
+  return res.status(401).json({ message: "Invalid role selected" });
+}
     // Check if user exists
     const user = await User.findOne({ email });
 

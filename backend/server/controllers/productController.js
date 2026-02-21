@@ -13,7 +13,7 @@ exports.createProduct = async (req, res) => {
   price,
   category,
   stock,
-  image,
+  image: req.file.path, // 🔥 get image path from multer
   seller: req.user._id,   
 });
 

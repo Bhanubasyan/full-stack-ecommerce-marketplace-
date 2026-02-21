@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const upload = require("../middleware/upload");
 const { protect, admin, seller } = require("../middleware/authMiddleware");
 
 const {
@@ -31,5 +31,14 @@ router.delete("/:id", protect, admin, deleteProduct);
 
 //approve product (Admin only)
 router.put("/:id/approve", protect, admin, approveProduct);
+
+//upload img by seller 
+router.post(
+  "/",
+  protect,
+  sellerOnly,
+  upload.single("image"),   // 👈 important
+  createProduct
+);
 
 module.exports = router;

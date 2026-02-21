@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
-import potteryImg from "../assets/pottery1.jpg";
+
 import "./productDetails.css";
 
 function ProductDetails() {
@@ -38,7 +38,7 @@ function ProductDetails() {
       <div className="product-detail-card">
 
         <div className="product-image">
-        <img src={potteryImg} alt={product.name}
+        <img src={product.image} alt={product.name}
          />
         </div>
 

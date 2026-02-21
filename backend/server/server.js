@@ -4,7 +4,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
-
+const path = require("path"); 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -24,6 +24,9 @@ const app = express();
 app.use(helmet()); // Secure HTTP headers
 app.use(express.json()); // Parse JSON body
 app.use(cookieParser()); // Parse cookies
+
+//  VERY IMPORTANT FOR IMAGE LOADING
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // CORS configuration
 app.use(

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import "./admin.css";
-import potteryImg from "../assets/pottery1.jpg";
+
 function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const [form, setForm] = useState({
@@ -68,7 +68,7 @@ function AdminDashboard() {
       <div className="admin-products">
         {products.map((product) => (
           <div className="admin-product-card" key={product._id}>
-            <img src={potteryImg} alt={product.name} />
+            <img src={product.image} alt={product.name} />
             <div>
               <h4>{product.name}</h4>
               <p>₹ {product.price}</p>

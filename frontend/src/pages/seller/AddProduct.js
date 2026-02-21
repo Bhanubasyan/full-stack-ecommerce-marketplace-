@@ -8,17 +8,40 @@ function AddProduct() {
     price: "",
     category: "",
     stock: "",
-    image: ""
+    image: null,   // 👈 image file
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.name === "image") {
+      setForm({ ...form, image: e.target.files[0] }); // 👈 file store
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await API.post("/products", form);
-    alert("Product Added");
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    formData.append("category", form.category);
+    formData.append("stock", form.stock);
+    formData.append("image", form.image);  // 👈 file send
+
+    try {
+      await API.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Product Added");
+    } catch (error) {
+      alert("Error adding product");
+      console.log(error);
+    }
   };
 
   return (
@@ -30,7 +53,14 @@ function AddProduct() {
       <input name="price" placeholder="Price" onChange={handleChange} />
       <input name="category" placeholder="Category" onChange={handleChange} />
       <input name="stock" placeholder="Stock" onChange={handleChange} />
-      <input name="image" placeholder="Image URL" onChange={handleChange} />
+
+      {/* 🔥 FILE INPUT */}
+      <input
+        type="file"
+        name="image"
+        accept="image/*"
+        onChange={handleChange}
+      />
 
       <button type="submit">Add</button>
     </form>

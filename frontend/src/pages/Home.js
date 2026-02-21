@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-import potteryImg from "../assets/pottery1.jpg";
+
 import "./Home.css";
 function Home() {
   const [products, setProducts] = useState([]);
@@ -86,7 +86,7 @@ function Home() {
           <div className="product-card" key={product._id}>
             <Link to={`/product/${product._id}`} className="product-link">
               <img
-                src={potteryImg}
+                src={product.image}
                 alt={product.name}
               />
               <h3>{product.name}</h3>

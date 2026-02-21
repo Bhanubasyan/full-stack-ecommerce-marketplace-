@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
-import potteryImg from "../assets/pottery1.jpg";
+
 import { useNavigate } from "react-router-dom";
 
 
@@ -55,7 +55,7 @@ const navigate = useNavigate();
       {cart.items.map((item) => (
   <div className="cart-card" key={item.product._id}>
     <div className="cart-left">
-      <img src={potteryImg} alt={item.product.name} />
+      <img src={item.product.image} alt={item.product.name} />
     </div>
 
     <div className="cart-middle">

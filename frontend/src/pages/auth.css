@@ -65,3 +65,24 @@
   color: blue;
   cursor: pointer;
 }
+
+.role-toggle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.role-toggle button {
+  width: 48%;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  background: #ccc;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.role-toggle .active {
+  background: black;
+  color: white;
+}
