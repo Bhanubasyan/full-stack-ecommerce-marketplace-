@@ -21,7 +21,7 @@ const app = express();
 // Security Middlewares
 // --------------------
 
-//app.use(helmet()); // Secure HTTP headers
+app.use(helmet()); // Secure HTTP headers
 app.use(express.json()); // Parse JSON body
 app.use(cookieParser()); // Parse cookies
 app.options("*", cors());
@@ -31,8 +31,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // CORS configuration
 app.use(
-   cors({
-    origin: true,
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://full-stack-ecommerce-marketplace.vercel.app",
+    ],
     credentials: true,
   })
 );
