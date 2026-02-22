@@ -150,7 +150,7 @@ exports.cancelOrder = async (req, res) => {
     }
 
     // Ownership check
-    if (order.user.toString() !== req.user._id.toString()) {
+    if (!order.user.equals(req.user._id)){
       return res.status(403).json({ message: "Not authorized" });
     }
 
