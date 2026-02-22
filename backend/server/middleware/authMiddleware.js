@@ -52,7 +52,3 @@ exports.seller = (req, res, next) => {
   }
 };
 
-exports.protect = (req, res, next) => {
-  // token verify logic
-};
-
