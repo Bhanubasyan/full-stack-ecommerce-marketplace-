@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ProductDetails from "./pages/ProductDetails";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -57,6 +58,7 @@ function App() {
 
 </Routes>
 
+      <Footer />  
     </Router>
   );
 }

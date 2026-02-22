@@ -54,15 +54,15 @@ function Auth() {
     }
   };
 
-  return (
-    <div className="auth-container">
-      <div className={`card ${isFlipped ? "flipped" : ""}`}>
+return (
+  <div className="auth-container">
+    <div className={`flip-card ${isFlipped ? "flipped" : ""}`}>
+      <div className="flip-card-inner">
 
         {/* LOGIN SIDE */}
-        <div className="card-front">
+        <div className="flip-card-front">
           <h2>Login</h2>
 
-          {/* 🔥 ROLE SELECTOR */}
           <div className="role-toggle">
             <button
               type="button"
@@ -88,15 +88,16 @@ function Auth() {
 
           <p>
             Don’t have an account?{" "}
-            <span onClick={() => setIsFlipped(true)}>Register</span>
+            <span className="switch-text" onClick={() => setIsFlipped(true)}>
+              Register
+            </span>
           </p>
         </div>
 
         {/* REGISTER SIDE */}
-        <div className="card-back">
+        <div className="flip-card-back">
           <h2>Register</h2>
 
-          {/* 🔥 SAME ROLE SELECTOR */}
           <div className="role-toggle">
             <button
               type="button"
@@ -123,13 +124,16 @@ function Auth() {
 
           <p>
             Already have an account?{" "}
-            <span onClick={() => setIsFlipped(false)}>Login</span>
+            <span className="switch-text" onClick={() => setIsFlipped(false)}>
+              Login
+            </span>
           </p>
         </div>
 
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default Auth;

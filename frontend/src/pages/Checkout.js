@@ -31,24 +31,55 @@ function Checkout() {
     0
   );
 
-  return (
-    <div className="checkout-container">
-      <h2>Checkout</h2>
+ return (
+  <div className="checkout-container">
 
-      {cart.items.map((item) => (
-        <div className="checkout-item" key={item.product._id}>
-          <p>{item.product.name}</p>
-          <p>{item.quantity} x ₹{item.product.price}</p>
-        </div>
-      ))}
+    <h2 className="checkout-title">Secure Checkout</h2>
 
-      <h3>Total: ₹ {total}</h3>
+    <div className="checkout-layout">
 
-      <button onClick={placeOrder}>
-        Place Order
-      </button>
+      {/* LEFT - ORDER ITEMS */}
+      <div className="checkout-items">
+        {cart.items.map((item) => (
+          <div className="checkout-item" key={item.product._id}>
+            <div className="checkout-item-left">
+              <img
+                src={item.product.image}
+                alt={item.product.name}
+              />
+            </div>
+
+            <div className="checkout-item-middle">
+              <h4>{item.product.name}</h4>
+              <p>
+                {item.quantity} × ₹ {item.product.price}
+              </p>
+            </div>
+
+            <div className="checkout-item-right">
+              ₹ {item.product.price * item.quantity}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* RIGHT - SUMMARY */}
+      <div className="checkout-summary">
+        <h3>Order Summary</h3>
+
+        <p className="summary-total">
+          Total: ₹ {total}
+        </p>
+
+        <button className="place-order-btn" onClick={placeOrder}>
+          Place Order
+        </button>
+      </div>
+
     </div>
-  );
+
+  </div>
+);
 }
 
 export default Checkout;

@@ -1,7 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import logo from "../assets/logo.png";
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -12,40 +13,44 @@ function Navbar() {
   };
 
   return (
-    <div className="navbar">
-      <h2>
-        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-          CraftRoots
-        </Link>
-      </h2>
+    <nav className="navbar">
+      <div className="nav-container">
 
-      <div className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/cart">Cart</Link>
+        {/* Logo */}
+        <div className="logo-section">
+  <Link to="/">
+    <img src={logo} alt="Clayora Logo" className="logo-img" />
+  </Link>
+</div>
 
-        {/* 🔥 Role Based Links */}
-        {user?.role === "admin" && (
-          <Link to="/admin">Admin</Link>
-        )}
+        {/* Links */}
+        <div className="nav-links">
+          <Link className={location.pathname === "/" ? "active" : ""} to="/">Home</Link>
+          <Link className={location.pathname === "/cart" ? "active" : ""} to="/cart">Cart</Link>
 
-        {user?.role === "seller" && (
-          <Link to="/seller">Seller</Link>
-        )}
+          {user?.role === "admin" && (
+            <Link to="/admin">Admin</Link>
+          )}
 
-        {user?.role === "buyer" && (
-          <Link to="/profile">Profile</Link>
-        )}
+          {user?.role === "seller" && (
+            <Link to="/seller">Seller</Link>
+          )}
 
-        {/* 🔐 Auth Buttons */}
-        {token ? (
-          <button onClick={handleLogout}>
-            Logout
-          </button>
-        ) : (
-          <Link to="/auth">Login</Link>
-        )}
+          {user?.role === "buyer" && (
+            <Link to="/profile">Profile</Link>
+          )}
+
+          {token ? (
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to="/auth" className="login-btn">Login</Link>
+          )}
+        </div>
+
       </div>
-    </div>
+    </nav>
   );
 }
 

@@ -54,54 +54,60 @@ function Home() {
   };
 
   return (
-    <div className="container">
-      <h1>Handmade Products</h1>
+  <div className="home-container">
 
-      {/* 🔍 SEARCH + FILTER SECTION */}
-      <div className="filter-section">
-        <form onSubmit={handleSearch} className="search-bar">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <button type="submit">Search</button>
-        </form>
+    {/* HERO SECTION */}
+    <section className="home-hero">
+      <h1>Crafted from Earth, Made for You</h1>
+      <p>Discover timeless handmade pottery by Clayora artisans.</p>
+    </section>
 
-        <select
-          value={category}
-          onChange={handleCategoryChange}
-          className="category-dropdown"
-        >
-          <option value="">All Categories</option>
-          <option value="Pottery">Pottery</option>
-          <option value="Wood">Wood</option>
-        </select>
-      </div>
+    {/* SEARCH + FILTER */}
+    <div className="filter-section">
+      <form onSubmit={handleSearch} className="search-bar">
+        <input
+          type="text"
+          placeholder="Search pottery..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
 
-      {/* PRODUCTS */}
-      <div className="products-grid">
-        {products.map((product) => (
-          <div className="product-card" key={product._id}>
-            <Link to={`/product/${product._id}`} className="product-link">
-              <img
-                src={product.image}
-                alt={product.name}
-              />
-              <h3>{product.name}</h3>
-            </Link>
-
-            <p>₹ {product.price}</p>
-
-            <button onClick={() => addToCart(product._id)}>
-              Add to Cart
-            </button>
-          </div>
-        ))}
-      </div>
+      <select
+        value={category}
+        onChange={handleCategoryChange}
+        className="category-dropdown"
+      >
+        <option value="">All Categories</option>
+        <option value="Pottery">Pottery</option>
+        <option value="Wood">Wood</option>
+      </select>
     </div>
-  );
+
+    {/* PRODUCTS GRID */}
+    <div className="products-grid">
+      {products.map((product) => (
+        <div className="product-card" key={product._id}>
+          <Link to={`/product/${product._id}`} className="product-link">
+            <img
+              src={product.image}
+              alt={product.name}
+            />
+            <h3>{product.name}</h3>
+          </Link>
+
+          <p className="price">₹ {product.price}</p>
+
+          <button onClick={() => addToCart(product._id)}>
+            Add to Cart
+          </button>
+        </div>
+      ))}
+    </div>
+
+  </div>
+);
 }
 
 export default Home;

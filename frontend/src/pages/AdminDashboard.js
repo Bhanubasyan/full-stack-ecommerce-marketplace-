@@ -49,38 +49,57 @@ function AdminDashboard() {
     fetchProducts();
   };
 
-  return (
-    <div className="admin-container">
-      <h2>Admin Dashboard</h2>
+return (
+  <div className="admin-container">
 
-      {/* Create Product Form */}
+    <h2 className="admin-title">Admin Dashboard</h2>
+
+    {/* CREATE PRODUCT */}
+    <div className="admin-form-card">
+      <h3>Add New Product</h3>
+
       <form className="admin-form" onSubmit={createProduct}>
-        <input name="name" placeholder="Name" value={form.name} onChange={handleChange} />
+        <input name="name" placeholder="Product Name" value={form.name} onChange={handleChange} />
         <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
         <input name="price" placeholder="Price" value={form.price} onChange={handleChange} />
         <input name="category" placeholder="Category" value={form.category} onChange={handleChange} />
         <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} />
         <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} />
-        <button type="submit">Create Product</button>
+        <button type="submit" className="primary-btn">
+          Create Product
+        </button>
       </form>
+    </div>
 
-      {/* Product List */}
+    {/* PRODUCT LIST */}
+    <div className="admin-products-section">
+      <h3>All Products</h3>
+
       <div className="admin-products">
         {products.map((product) => (
           <div className="admin-product-card" key={product._id}>
+
             <img src={product.image} alt={product.name} />
-            <div>
+
+            <div className="admin-product-info">
               <h4>{product.name}</h4>
               <p>₹ {product.price}</p>
             </div>
-            <button onClick={() => deleteProduct(product._id)}>
+
+            <button
+              className="delete-btn"
+              onClick={() => deleteProduct(product._id)}
+            >
               Delete
             </button>
+
           </div>
         ))}
       </div>
     </div>
-  );
+
+  </div>
+);
 }
 
 export default AdminDashboard;

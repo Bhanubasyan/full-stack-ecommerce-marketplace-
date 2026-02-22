@@ -69,91 +69,95 @@ function Profile() {
 
   if (!user) return <h2 style={{ color: "white" }}>Loading...</h2>;
 
-  return (
-    <div className="profile-container">
+return (
+  <div className="profile-container">
 
-      <div className="profile-card">
-        <img
-          src="https://i.pravatar.cc/150?img=3"
-          alt="User"
-          className="profile-image"
-        />
+    {/* LEFT SIDE - PROFILE */}
+    <div className="profile-card">
+      <img
+        src="https://i.pravatar.cc/150?img=3"
+        alt="User"
+        className="profile-image"
+      />
 
-        <h2>{user.name}</h2>
+      <h2>{user.name}</h2>
 
-        <div className="profile-info">
-          <p><strong>Email:</strong> {user.email}</p>
+      <div className="profile-info">
+        <p><strong>Email:</strong> {user.email}</p>
 
-          {isEditing ? (
-            <>
-              <input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Contact number"
-              />
-              <input
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Address"
-              />
-              <button onClick={saveChanges}>Save</button>
-            </>
-          ) : (
-            <>
-              <p><strong>Contact:</strong> {phone || "Not added"}</p>
-              <p><strong>Address:</strong> {address || "Not added"}</p>
-              <button onClick={() => setIsEditing(true)}>
-                Edit Profile
-              </button>
-            </>
-          )}
-        </div>
-
-        <button onClick={logout} className="logout-btn">
-          Logout
-        </button>
-      </div>
-
-      <div className="orders-section">
-        <h3>My Orders</h3>
-
-        {orders.length === 0 ? (
-          <p className="no-orders">No orders yet.</p>
+        {isEditing ? (
+          <>
+            <input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Contact number"
+            />
+            <input
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Address"
+            />
+            <button className="primary-btn" onClick={saveChanges}>
+              Save Changes
+            </button>
+          </>
         ) : (
-          orders.map((order) => (
-            <div key={order._id} className="order-card">
-
-              <div>
-                <p><strong>Order ID:</strong> {order._id}</p>
-                <p><strong>Total:</strong> ₹ {order.totalAmount}</p>
-              </div>
-
-              <div className="order-actions">
-
-                <div className={`order-status`}>
-                  {order.status}
-                </div>
-
-                {/* Cancel Button */}
-                {order.status !== "Delivered" &&
-                  order.status !== "Cancelled" && (
-                    <button
-                      className="cancel-btn"
-                      onClick={() => cancelOrder(order._id)}
-                    >
-                      Cancel Order
-                    </button>
-                  )}
-
-              </div>
-
-            </div>
-          ))
+          <>
+            <p><strong>Contact:</strong> {phone || "Not added"}</p>
+            <p><strong>Address:</strong> {address || "Not added"}</p>
+            <button
+              className="primary-btn"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit Profile
+            </button>
+          </>
         )}
       </div>
 
+      <button onClick={logout} className="logout-profile-btn">
+        Logout
+      </button>
     </div>
-  );
+
+    {/* RIGHT SIDE - ORDERS */}
+    <div className="orders-section">
+      <h3>My Orders</h3>
+
+      {orders.length === 0 ? (
+        <p className="no-orders">No orders yet.</p>
+      ) : (
+        orders.map((order) => (
+          <div key={order._id} className="order-card">
+
+            <div className="order-info">
+              <p><strong>Order ID:</strong> {order._id}</p>
+              <p><strong>Total:</strong> ₹ {order.totalAmount}</p>
+            </div>
+
+            <div className="order-actions">
+              <div className="order-status">
+                {order.status}
+              </div>
+
+              {order.status !== "Delivered" &&
+                order.status !== "Cancelled" && (
+                  <button
+                    className="cancel-btn"
+                    onClick={() => cancelOrder(order._id)}
+                  >
+                    Cancel Order
+                  </button>
+                )}
+            </div>
+
+          </div>
+        ))
+      )}
+    </div>
+
+  </div>
+);
 }
 
 export default Profile;

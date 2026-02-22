@@ -1,36 +1,60 @@
 import { useEffect, useState } from "react";
 import API from "../../services/api";
 
-function SellerProducts() {
-  const [products, setProducts] = useState([]);
+function SellerOrders() {
+  const [orders, setOrders] = useState([]);
 
-  const fetchProducts = async () => {
-    const res = await API.get("/products/my-products");
-    setProducts(res.data);
+  const fetchOrders = async () => {
+    try {
+      const res = await API.get("/orders/seller");
+      setOrders(res.data);
+    } catch (error) {
+      console.error("Error fetching seller orders:", error);
+    }
   };
 
-  const deleteProduct = async (id) => {
-    await API.delete(`/products/${id}`);
-    fetchProducts();
+  const updateStatus = async (id, status) => {
+    try {
+      await API.put(`/orders/${id}`, { status });
+      fetchOrders();
+    } catch (error) {
+      alert("Failed to update order status");
+    }
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchOrders();
   }, []);
 
   return (
     <div>
-      <h2>My Products</h2>
+      <h2>Seller Orders</h2>
 
-      {products.map((p) => (
-        <div key={p._id}>
-          <h4>{p.name}</h4>
-          <p>₹ {p.price}</p>
-          <button onClick={() => deleteProduct(p._id)}>Delete</button>
-        </div>
-      ))}
+      {orders.length === 0 ? (
+        <p>No orders found.</p>
+      ) : (
+        orders.map((order) => (
+          <div key={order._id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
+            <p><strong>Order ID:</strong> {order._id}</p>
+            <p><strong>Total:</strong> ₹ {order.totalAmount}</p>
+            <p><strong>Status:</strong> {order.status}</p>
+
+            {order.status === "Pending" && (
+              <button onClick={() => updateStatus(order._id, "Shipped")}>
+                Mark as Shipped
+              </button>
+            )}
+
+            {order.status === "Shipped" && (
+              <button onClick={() => updateStatus(order._id, "Delivered")}>
+                Mark as Delivered
+              </button>
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }
 
-export default SellerProducts;
+export default SellerOrders;
