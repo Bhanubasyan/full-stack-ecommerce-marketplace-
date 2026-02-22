@@ -17,8 +17,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",   // Local frontend
-  // 🔥 Add your Render frontend URL here after deploy
-  // "https://your-frontend-name.onrender.com"
+ "https://full-stack-ecommerce-marketplace-1.onrender.com"
 ];
 
 app.use(
