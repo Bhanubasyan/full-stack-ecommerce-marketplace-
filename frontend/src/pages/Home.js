@@ -3,20 +3,26 @@ import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 import "./Home.css";
 
-const heroImages = [
-  "https://images.unsplash.com/photo-1605210052777-4f4c9c9c56c3",
-  "https://images.unsplash.com/photo-1586864387789-628af9feed72",
-  "https://images.unsplash.com/photo-1576020799627-aeac74d58064",
-  "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e",
-  "https://images.unsplash.com/photo-1610701596007-11502861dcfa",
-  "https://images.unsplash.com/photo-1603787081207-362bcef7c144",
-  "https://images.unsplash.com/photo-1590846406792-0adc7f938f1d",
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6",
-  "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf",
-  "https://images.unsplash.com/photo-1581783898377-1c85bf937427"
-];
-
+import image2 from "../assets/hero/image2.png";
+import image3 from "../assets/hero/image3.png";
+import image4 from "../assets/hero/image4.png";
+import image5 from "../assets/hero/image5.png";
+import image6 from "../assets/hero/image6.png";
+import image7 from "../assets/hero/image7.png";
+import image8 from "../assets/hero/image8.png";
+import image9 from "../assets/hero/image9.png";
 function Home() {
+  const heroImages = [
+  
+  image2,
+  image3,
+  image4,
+  image5,
+  image6,
+  image7,
+  image8,
+  image9,
+];
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
