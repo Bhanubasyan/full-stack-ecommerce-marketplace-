@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Landing from "./pages/Landing";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
@@ -8,11 +9,13 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Profile from "./pages/Profile";
+
 import SellerDashboard from "./pages/seller/SellerDashboard";
 import SellerProducts from "./pages/seller/SellerProducts";
 import AddProduct from "./pages/seller/AddProduct";
 import SellerOrders from "./pages/seller/SellerOrders";
 import EditProduct from "./pages/seller/EditProduct";
+
 import AdminRoute from "./components/AdminRoute";
 import SellerRoute from "./components/SellerRoute";
 import MainLayout from "./components/MainLayout";
@@ -21,11 +24,14 @@ function App() {
   return (
     <Router>
       <Routes>
+
         {/* Landing Page */}
         <Route path="/" element={<Landing />} />
 
-        {/* All Main Pages with Navbar + Footer */}
+        {/* Main Layout (Navbar + Footer wrapped pages) */}
         <Route element={<MainLayout />}>
+
+          {/* Public Routes */}
           <Route path="/home" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
@@ -34,6 +40,7 @@ function App() {
           <Route path="/success" element={<OrderSuccess />} />
           <Route path="/profile" element={<Profile />} />
 
+          {/* ================= ADMIN ================= */}
           <Route
             path="/admin"
             element={
@@ -43,6 +50,7 @@ function App() {
             }
           />
 
+          {/* ================= SELLER ================= */}
           <Route
             path="/seller"
             element={
@@ -56,7 +64,9 @@ function App() {
             <Route path="orders" element={<SellerOrders />} />
             <Route path="edit-product/:id" element={<EditProduct />} />
           </Route>
+
         </Route>
+
       </Routes>
     </Router>
   );

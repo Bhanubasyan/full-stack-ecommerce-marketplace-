@@ -1,6 +1,7 @@
 import { useState } from "react";
 import API from "../../services/api";
 import "./seller.css";
+
 function AddProduct() {
   const [form, setForm] = useState({
     name: "",
@@ -8,105 +9,126 @@ function AddProduct() {
     price: "",
     category: "",
     stock: "",
-    image: null,   // 👈 image file
+    image: null,
   });
 
   const handleChange = (e) => {
     if (e.target.name === "image") {
-      setForm({ ...form, image: e.target.files[0] }); // 👈 file store
+      setForm({ ...form, image: e.target.files[0] });
     } else {
       setForm({ ...form, [e.target.name]: e.target.value });
     }
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("name", form.name);
-  formData.append("description", form.description);
-  formData.append("price", form.price);
-  formData.append("category", form.category);
-  formData.append("stock", form.stock);
+    if (!form.image) {
+      alert("Image is required");
+      return;
+    }
 
-  if (form.image) {
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    formData.append("category", form.category);
+    formData.append("stock", form.stock);
     formData.append("image", form.image);
-  }
 
-  try {
-    await API.post("/products", formData);   // ❌ NO HEADERS HERE
-    alert("Product Added");
-  } catch (error) {
-    console.log(error.response?.data);
-    alert("Error adding product");
-  }
-};
-return (
-  <div className="add-product-container">
+    try {
+      await API.post("/products", formData);
+      alert("Product Added Successfully");
 
-    <div className="add-product-card">
-      <h2 className="add-title">Add New Product</h2>
+      // Reset form after success
+      setForm({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        stock: "",
+        image: null,
+      });
 
-      <form onSubmit={handleSubmit} className="add-product-form">
+    } catch (error) {
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Error adding product");
+    }
+  };
 
-        <input
-          name="name"
-          placeholder="Product Name"
-          onChange={handleChange}
-          required
-        />
+  return (
+    <div className="add-product-container">
+      <div className="add-product-card">
+        <h2 className="add-title">Add New Product</h2>
 
-        <textarea
-          name="description"
-          placeholder="Description"
-          onChange={handleChange}
-          rows="3"
-          required
-        />
+        <form onSubmit={handleSubmit} className="add-product-form">
 
-        <input
-          name="price"
-          type="number"
-          placeholder="Price"
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="category"
-          placeholder="Category"
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          name="stock"
-          type="number"
-          placeholder="Stock"
-          onChange={handleChange}
-          required
-        />
-
-        {/* FILE INPUT */}
-        <label className="file-label">
-          Upload Product Image
           <input
-            type="file"
-            name="image"
-            accept="image/*"
+            name="name"
+            placeholder="Product Name"
+            value={form.name}
             onChange={handleChange}
+            required
           />
-        </label>
 
-        <button type="submit" className="primary-btn">
-          Add Product
-        </button>
+          <textarea
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            rows="3"
+            required
+          />
 
-      </form>
+          <input
+            name="price"
+            type="number"
+            placeholder="Price"
+            value={form.price}
+            onChange={handleChange}
+            required
+          />
+
+          {/* CATEGORY DROPDOWN (Matches Backend Enum) */}
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category</option>
+            <option value="Pottery">Pottery</option>
+            <option value="Wood">Wood</option>
+          </select>
+
+          <input
+            name="stock"
+            type="number"
+            placeholder="Stock"
+            value={form.stock}
+            onChange={handleChange}
+            required
+          />
+
+          <label className="file-label">
+            Upload Product Image
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <button type="submit" className="primary-btn">
+            Add Product
+          </button>
+
+        </form>
+      </div>
     </div>
-
-  </div>
-);
+  );
 }
 
 export default AddProduct;

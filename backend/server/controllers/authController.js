@@ -53,22 +53,16 @@ exports.registerUser = async (req, res) => {
 // ================= LOGIN =================
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password } = req.body;  // ❌ role removed
 
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 🔥 FIRST find user
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    // 🔥 THEN check role
-    if (role && user.role !== role) {
-      return res.status(401).json({ message: "Invalid role selected" });
     }
 
     const isMatch = await user.matchPassword(password);

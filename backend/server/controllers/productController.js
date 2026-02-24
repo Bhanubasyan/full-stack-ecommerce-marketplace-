@@ -8,27 +8,20 @@ exports.createProduct = async (req, res) => {
     console.log("BODY:", req.body);
     console.log("FILE:", req.file);
 
-    if (!req.body) {
-      return res.status(400).json({ message: "No form data received" });
-    }
+    const { name, description, price, category, stock } = req.body;
 
-    const name = req.body.name;
-    const description = req.body.description;
-    const price = req.body.price;
-    const category = req.body.category;
-    const stock = req.body.stock;
-
-    if (!name || !price) {
-      return res.status(400).json({ message: "Missing required fields" });
+    // Required validation
+    if (!name || !price || !category || !stock || !req.file) {
+      return res.status(400).json({ message: "All fields including image are required" });
     }
 
     const product = await Product.create({
       name,
       description,
-      price,
+      price: Number(price),
       category,
-      stock,
-      image: req.file ? req.file.path : null, // Cloudinary URL
+      stock: Number(stock),
+      image: req.file.path,   // image required now
       seller: req.user._id,
     });
 

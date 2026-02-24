@@ -4,7 +4,7 @@ const SellerRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user || user.role !== "seller") {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }
 
   return children;

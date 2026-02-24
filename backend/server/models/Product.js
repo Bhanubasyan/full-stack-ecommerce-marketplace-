@@ -29,14 +29,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    seller: {
+  seller: {
   type: mongoose.Schema.Types.ObjectId,
   ref: "User",
-
+  required: true,  // seller fix 
 },
+
 isApproved: {
   type: Boolean,
-  default: false
+  default: true
 }
 
 

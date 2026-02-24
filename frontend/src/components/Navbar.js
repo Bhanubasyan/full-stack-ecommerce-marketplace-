@@ -6,11 +6,18 @@ import "./Navbar.css";
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
 
+  const [user, setUser] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // 🔥 Read user properly
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   /* ===== Scroll Effect ===== */
   useEffect(() => {
@@ -23,9 +30,8 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-    window.location.reload();
+    localStorage.removeItem("user");
+    window.location.href = "/";
   };
 
   return (
@@ -51,32 +57,55 @@ function Navbar() {
 
         {/* Links */}
         <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <Link onClick={() => setMenuOpen(false)} className={location.pathname === "/" ? "active" : ""} to="/">Home</Link>
-          <Link onClick={() => setMenuOpen(false)} className={location.pathname === "/cart" ? "active" : ""} to="/cart">Cart</Link>
+
+          <Link
+            onClick={() => setMenuOpen(false)}
+            className={location.pathname === "/home" ? "active" : ""}
+            to="/home"
+          >
+            Home
+          </Link>
+
+          <Link
+            onClick={() => setMenuOpen(false)}
+            className={location.pathname === "/cart" ? "active" : ""}
+            to="/cart"
+          >
+            Cart
+          </Link>
 
           {user?.role === "admin" && (
-            <Link onClick={() => setMenuOpen(false)} to="/admin">Admin</Link>
+            <Link onClick={() => setMenuOpen(false)} to="/admin">
+              Admin
+            </Link>
           )}
 
           {user?.role === "seller" && (
-            <Link onClick={() => setMenuOpen(false)} to="/seller">Seller</Link>
+            <Link onClick={() => setMenuOpen(false)} to="/seller">
+              Seller
+            </Link>
           )}
 
           {user?.role === "buyer" && (
-            <Link onClick={() => setMenuOpen(false)} to="/profile">Profile</Link>
+            <Link onClick={() => setMenuOpen(false)} to="/profile">
+              Profile
+            </Link>
           )}
 
-          {token ? (
+          {user ? (
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           ) : (
-            <Link onClick={() => setMenuOpen(false)} to="/auth" className="login-btn">
+            <Link
+              onClick={() => setMenuOpen(false)}
+              to="/auth"
+              className="login-btn"
+            >
               Login
             </Link>
           )}
         </div>
-
       </div>
     </nav>
   );

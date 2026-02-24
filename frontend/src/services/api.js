@@ -1,17 +1,17 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-  withCredentials: true
- 
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
-// Add token automatically
+//  IMPORTANT FIX
 API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user?.token) {
+    req.headers.Authorization = `Bearer ${user.token}`;
   }
+
   return req;
 });
 

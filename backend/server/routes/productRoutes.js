@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const upload = require("../middleware/upload");
 const { protect, admin, seller } = require("../middleware/authMiddleware");
 
@@ -11,33 +12,53 @@ const {
   deleteProduct,
   seedProducts,
   getMyProducts,
-  approveProduct 
+  approveProduct,
 } = require("../controllers/productController");
 
-// Seed (Admin only)
+
+// =========================
+// Admin Routes
+// =========================
+
+// Seed products (Admin only)
 router.post("/seed", protect, admin, seedProducts);
 
-// Seller routes
-router.post("/", protect, seller, createProduct);
-router.get("/my-products", protect, seller, getMyProducts);
-
-// Public routes
-router.get("/", getProducts);
-router.get("/:id", getProductById);
-
-// Admin management
-router.put("/:id", protect, admin, updateProduct);
-router.delete("/:id", protect, admin, deleteProduct);
-
-//approve product (Admin only)
+// Approve product (Admin only)
 router.put("/:id/approve", protect, admin, approveProduct);
 
-//upload img by seller 
+// Update product (Admin only)
+router.put("/:id", protect, admin, updateProduct);
+
+// Delete product (Admin only)
+router.delete("/:id", protect, admin, deleteProduct);
+
+
+// =========================
+// Seller Routes
+// =========================
+
+// Create product (Seller only + Image upload)
 router.post(
   "/",
   protect,
-  upload.single("image"),   
+  seller,
+  upload.single("image"),
   createProduct
 );
+
+// Get seller's own products
+router.get("/my-products", protect, seller, getMyProducts);
+
+
+// =========================
+// Public Routes
+// =========================
+
+// Get all products
+router.get("/", getProducts);
+
+// Get single product
+router.get("/:id", getProductById);
+
 
 module.exports = router;

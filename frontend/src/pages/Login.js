@@ -5,7 +5,7 @@ import API from "../services/api";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("buyer"); // ✅ role state
+  const [role, setRole] = useState("buyer");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,33 +15,30 @@ function Login() {
       const { data } = await API.post("/auth/login", {
         email,
         password,
-        role, // ✅ ROLE YAHI ADD KIYA
+     role,
       });
 
-      localStorage.setItem("token", data.token);
+      // ✅ Correct storage key
       localStorage.setItem("user", JSON.stringify(data));
 
       alert("Login Successful!");
 
-      // ✅ Role-based redirect
       if (data.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (data.role === "seller") {
-        navigate("/seller/dashboard");
-      } else {
-        navigate("/");
-      }
+  window.location.href = "/admin";
+} else if (data.role === "seller") {
+  window.location.href = "/seller";
+} else {
+  window.location.href = "/home";
+}
 
     } catch (error) {
       alert(error.response?.data?.message || "Login Failed");
-      console.log(error.response?.data);
     }
   };
 
   return (
     <div className="container">
 
-      {/* ✅ Role Selection */}
       <div style={{ marginBottom: "15px" }}>
         <button
           type="button"
@@ -77,6 +74,7 @@ function Login() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <br /><br />
 
@@ -85,6 +83,7 @@ function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <br /><br />
 

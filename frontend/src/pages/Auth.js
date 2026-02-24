@@ -5,7 +5,7 @@ import "./auth.css";
 
 function Auth() {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [role, setRole] = useState("buyer"); // ✅ Role state
+  const [role, setRole] = useState("buyer");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -17,13 +17,14 @@ function Auth() {
       const { data } = await API.post("/auth/login", {
         email,
         password,
-        role, // ✅ ROLE SENT
+        role,
       });
 
-      localStorage.setItem("token", data.token);
+      // ✅ FIXED STORAGE
       localStorage.setItem("user", JSON.stringify(data));
 
       if (data.role === "seller") navigate("/seller");
+      else if (data.role === "admin") navigate("/admin");
       else navigate("/");
 
     } catch (error) {
@@ -42,11 +43,12 @@ function Auth() {
         name,
         email,
         password,
-        role, // ✅ Role while registering
+        role,
       });
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data));
+      // ✅ FIXED STORAGE
+      localStorage.setItem("userInfo", JSON.stringify(data));
+
       navigate("/");
 
     } catch (error) {
@@ -54,86 +56,86 @@ function Auth() {
     }
   };
 
-return (
-  <div className="auth-container">
-    <div className={`flip-card ${isFlipped ? "flipped" : ""}`}>
-      <div className="flip-card-inner">
+  return (
+    <div className="auth-container">
+      <div className={`flip-card ${isFlipped ? "flipped" : ""}`}>
+        <div className="flip-card-inner">
 
-        {/* LOGIN SIDE */}
-        <div className="flip-card-front">
-          <h2>Login</h2>
+          {/* LOGIN SIDE */}
+          <div className="flip-card-front">
+            <h2>Login</h2>
 
-          <div className="role-toggle">
-            <button
-              type="button"
-              className={role === "buyer" ? "active" : ""}
-              onClick={() => setRole("buyer")}
-            >
-              Buyer
-            </button>
-            <button
-              type="button"
-              className={role === "seller" ? "active" : ""}
-              onClick={() => setRole("seller")}
-            >
-              Seller
-            </button>
+            <div className="role-toggle">
+              <button
+                type="button"
+                className={role === "buyer" ? "active" : ""}
+                onClick={() => setRole("buyer")}
+              >
+                Buyer
+              </button>
+              <button
+                type="button"
+                className={role === "seller" ? "active" : ""}
+                onClick={() => setRole("seller")}
+              >
+                Seller
+              </button>
+            </div>
+
+            <form onSubmit={handleLogin}>
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="password" type="password" placeholder="Password" required />
+              <button type="submit">Login</button>
+            </form>
+
+            <p>
+              Don’t have an account?{" "}
+              <span className="switch-text" onClick={() => setIsFlipped(true)}>
+                Register
+              </span>
+            </p>
           </div>
 
-          <form onSubmit={handleLogin}>
-            <input name="email" type="email" placeholder="Email" required />
-            <input name="password" type="password" placeholder="Password" required />
-            <button type="submit">Login</button>
-          </form>
+          {/* REGISTER SIDE */}
+          <div className="flip-card-back">
+            <h2>Register</h2>
 
-          <p>
-            Don’t have an account?{" "}
-            <span className="switch-text" onClick={() => setIsFlipped(true)}>
-              Register
-            </span>
-          </p>
-        </div>
+            <div className="role-toggle">
+              <button
+                type="button"
+                className={role === "buyer" ? "active" : ""}
+                onClick={() => setRole("buyer")}
+              >
+                Buyer
+              </button>
+              <button
+                type="button"
+                className={role === "seller" ? "active" : ""}
+                onClick={() => setRole("seller")}
+              >
+                Seller
+              </button>
+            </div>
 
-        {/* REGISTER SIDE */}
-        <div className="flip-card-back">
-          <h2>Register</h2>
+            <form onSubmit={handleRegister}>
+              <input name="name" type="text" placeholder="Name" required />
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="password" type="password" placeholder="Password" required />
+              <button type="submit">Register</button>
+            </form>
 
-          <div className="role-toggle">
-            <button
-              type="button"
-              className={role === "buyer" ? "active" : ""}
-              onClick={() => setRole("buyer")}
-            >
-              Buyer
-            </button>
-            <button
-              type="button"
-              className={role === "seller" ? "active" : ""}
-              onClick={() => setRole("seller")}
-            >
-              Seller
-            </button>
+            <p>
+              Already have an account?{" "}
+              <span className="switch-text" onClick={() => setIsFlipped(false)}>
+                Login
+              </span>
+            </p>
           </div>
 
-          <form onSubmit={handleRegister}>
-            <input name="name" type="text" placeholder="Name" required />
-            <input name="email" type="email" placeholder="Email" required />
-            <input name="password" type="password" placeholder="Password" required />
-            <button type="submit">Register</button>
-          </form>
-
-          <p>
-            Already have an account?{" "}
-            <span className="switch-text" onClick={() => setIsFlipped(false)}>
-              Login
-            </span>
-          </p>
         </div>
-
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Auth;
