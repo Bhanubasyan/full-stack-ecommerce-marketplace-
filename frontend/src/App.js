@@ -20,6 +20,7 @@ import AdminRoute from "./components/AdminRoute";
 import SellerRoute from "./components/SellerRoute";
 import MainLayout from "./components/MainLayout";
 
+
 function App() {
   return (
     <Router>
@@ -34,6 +35,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/home" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/login" element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/checkout" element={<Checkout />} />

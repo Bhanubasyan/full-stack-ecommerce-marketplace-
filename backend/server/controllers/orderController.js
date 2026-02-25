@@ -44,10 +44,14 @@ exports.createOrder = async (req, res) => {
     });
 
     // 🔥 REDUCE STOCK AFTER ORDER SUCCESS
-    for (let item of cart.items) {
-      item.product.stock -= item.quantity;
-      await item.product.save();
-    }
+// 🔥 REDUCE STOCK AFTER ORDER SUCCESS
+for (let item of cart.items) {
+  await Product.findByIdAndUpdate(
+    item.product._id,
+    { $inc: { stock: -item.quantity } },
+    { new: true }
+  );
+}
 
     // 🔥 CLEAR CART
     cart.items = [];
