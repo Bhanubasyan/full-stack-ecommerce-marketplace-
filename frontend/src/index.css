@@ -22,8 +22,6 @@ html, body, #root {
   flex: 1;
 }
 
-
-
 /* FORCE BORDER ON HOME PRODUCT IMAGES */
 .products-grid .product-card img {
 
