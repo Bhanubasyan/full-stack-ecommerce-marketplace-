@@ -18,7 +18,7 @@ function Login() {
      role,
       });
 
-      // ✅ Correct storage key
+      // Correct storage key
       localStorage.setItem("user", JSON.stringify(data));
 
       alert("Login Successful!");

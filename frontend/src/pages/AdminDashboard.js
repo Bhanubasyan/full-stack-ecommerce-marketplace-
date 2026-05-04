@@ -4,21 +4,24 @@ import "./admin.css";
 
 function AdminDashboard() {
   const [products, setProducts] = useState([]);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
     stock: "",
-    image: ""
+    image: null
   });
 
   const fetchProducts = async () => {
     try {
-      const res = await API.get("/products");
+      setError("");
+      const res = await API.get("/products/admin/all");
       setProducts(res.data.products);
     } catch (err) {
       console.log(err);
+      setError("Unable to load products. Make sure you are logged in as admin.");
     }
   };
 
@@ -27,25 +30,53 @@ function AdminDashboard() {
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    if (e.target.name === "image") {
+      setForm({ ...form, image: e.target.files[0] });
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value });
+    }
   };
 
   const createProduct = async (e) => {
     e.preventDefault();
-    await API.post("/products", form);
+
+    if (!form.image) {
+      alert("Image is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    formData.append("category", form.category);
+    formData.append("stock", form.stock);
+    formData.append("image", form.image);
+
+    await API.post("/products", formData);
     setForm({
       name: "",
       description: "",
       price: "",
       category: "",
       stock: "",
-      image: ""
+      image: null
     });
     fetchProducts();
   };
 
   const deleteProduct = async (id) => {
     await API.delete(`/products/${id}`);
+    fetchProducts();
+  };
+
+  const approveProduct = async (id) => {
+    await API.put(`/products/${id}/approve`);
+    fetchProducts();
+  };
+
+  const unapproveProduct = async (id) => {
+    await API.put(`/products/${id}/unapprove`);
     fetchProducts();
   };
 
@@ -62,9 +93,13 @@ return (
         <input name="name" placeholder="Product Name" value={form.name} onChange={handleChange} />
         <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
         <input name="price" placeholder="Price" value={form.price} onChange={handleChange} />
-        <input name="category" placeholder="Category" value={form.category} onChange={handleChange} />
-        <input name="stock" placeholder="Stock" value={form.stock} onChange={handleChange} />
-        <input name="image" placeholder="Image URL" value={form.image} onChange={handleChange} />
+        <select name="category" value={form.category} onChange={handleChange} required>
+          <option value="">Select Category</option>
+          <option value="Pottery">Pottery</option>
+          <option value="Wood">Wood</option>
+        </select>
+        <input name="stock" type="number" placeholder="Stock" value={form.stock} onChange={handleChange} />
+        <input name="image" type="file" accept="image/*" onChange={handleChange} />
         <button type="submit" className="primary-btn">
           Create Product
         </button>
@@ -76,15 +111,37 @@ return (
       <h3>All Products</h3>
 
       <div className="admin-products">
-        {products.map((product) => (
+        {error ? (
+          <p>{error}</p>
+        ) : products.length === 0 ? (
+          <p>No products found.</p>
+        ) : (
+          products.map((product) => (
           <div className="admin-product-card" key={product._id}>
 
             <img src={product.image} alt={product.name} />
 
             <div className="admin-product-info">
               <h4>{product.name}</h4>
-              <p>₹ {product.price}</p>
+              <p>Rs. {product.price}</p>
+              <p>{product.isApproved ? "Approved" : "Pending approval"}</p>
             </div>
+
+            {product.isApproved ? (
+              <button
+                className="primary-btn"
+                onClick={() => unapproveProduct(product._id)}
+              >
+                Unapprove
+              </button>
+            ) : (
+              <button
+                className="primary-btn"
+                onClick={() => approveProduct(product._id)}
+              >
+                Approve
+              </button>
+            )}
 
             <button
               className="delete-btn"
@@ -94,7 +151,8 @@ return (
             </button>
 
           </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
 

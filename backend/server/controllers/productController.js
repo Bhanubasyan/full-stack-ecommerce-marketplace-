@@ -2,16 +2,17 @@ const Product = require("../models/Product");
 
 // @desc    Create Product
 // @route   POST /api/products
-// @access  Admin
+// @access  Admin/Seller
 exports.createProduct = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+    if (!["admin", "seller"].includes(req.user.role)) {
+      return res.status(403).json({ message: "Admin or seller access only" });
+    }
 
-    const { name, description, price, category, stock } = req.body;
+    const { name, description, price, category, stock, image } = req.body;
+    const productImage = req.file?.path || image;
 
-    // Required validation
-    if (!name || !price || !category || !stock || !req.file) {
+    if (!name || !description || !price || !category || !stock || !productImage) {
       return res.status(400).json({ message: "All fields including image are required" });
     }
 
@@ -21,8 +22,9 @@ exports.createProduct = async (req, res) => {
       price: Number(price),
       category,
       stock: Number(stock),
-      image: req.file.path,   // image required now
+      image: productImage,
       seller: req.user._id,
+      isApproved: false,
     });
 
     res.status(201).json(product);
@@ -46,7 +48,7 @@ exports.getProducts = async (req, res) => {
       limit = 10,
     } = req.query;
 
-    const query = {};
+    const query = { isApproved: true };
 
     // 🔎 Search by name
     if (keyword) {
@@ -100,7 +102,8 @@ exports.seedProducts = async (req, res) => {
         category: i % 2 === 0 ? "Pottery" : "Wood",
         stock: Math.floor(Math.random() * 50) + 1,
         image: "https://www.google.com/imgres?q=pottery%20image&imgurl=https%3A%2F%2Fimg.freepik.com%2Ffree-photo%2Fhands-working-pottery-wheel_181624-57055.jpg%3Fsemt%3Dais_user_personalization%26w%3D740%26q%3D80&imgrefurl=https%3A%2F%2Fwww.freepik.com%2Ffree-photos-vectors%2Fpottery&docid=o0qDqNTZNkXDfM&tbnid=UKhlYw7EqDOSPM&vet=12ahUKEwjmiIrvp-ySAxWnR2wGHVxlADQQnPAOegQIFhAB..i&w=740&h=493&hcb=2&ved=2ahUKEwjmiIrvp-ySAxWnR2wGHVxlADQQnPAOegQIFhAB",
-        seller: req.user._id,   // 🔥 VERY IMPORTANT
+        seller: req.user._id,
+        isApproved: false,
       });
     }
 
@@ -147,7 +150,7 @@ exports.updateProduct = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // 🔥 Ownership + Admin Check
+    // Ownership and admin check
     if (
       product.seller.toString() !== req.user._id.toString() &&
       req.user.role !== "admin"
@@ -155,7 +158,7 @@ exports.updateProduct = async (req, res) => {
       return res.status(403).json({ message: "Not authorized" });
     }
 
-    // 🔥 Update Fields
+    // Update fields
     product.name = req.body.name || product.name;
     product.description = req.body.description || product.description;
     product.price = req.body.price || product.price;
@@ -180,6 +183,13 @@ exports.deleteProduct = async (req, res) => {
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (
+      product.seller.toString() !== req.user._id.toString() &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({ message: "Not authorized" });
     }
 
     await product.deleteOne();
@@ -219,6 +229,39 @@ exports.approveProduct = async (req, res) => {
 
     res.status(200).json({ message: "Product approved successfully" });
 
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.unapproveProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    product.isApproved = false;
+    await product.save();
+
+    res.status(200).json({ message: "Product moved to pending approval" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get all products for admin, including pending approval
+// @route   GET /api/products/admin/all
+// @access  Admin/Seller
+exports.getAdminProducts = async (req, res) => {
+  try {
+    const products = await Product.find().populate("seller", "name email role");
+
+    res.status(200).json({
+      total: products.length,
+      products,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

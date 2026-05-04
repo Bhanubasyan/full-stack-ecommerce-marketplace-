@@ -17,15 +17,13 @@ function Auth() {
       const { data } = await API.post("/auth/login", {
         email,
         password,
-        role,
       });
 
-      // ✅ FIXED STORAGE
       localStorage.setItem("user", JSON.stringify(data));
 
       if (data.role === "seller") navigate("/seller");
       else if (data.role === "admin") navigate("/admin");
-      else navigate("/");
+      else navigate("/home");
 
     } catch (error) {
       alert(error.response?.data?.message || "Login Failed");
@@ -46,10 +44,11 @@ function Auth() {
         role,
       });
 
-      // ✅ FIXED STORAGE
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("user", JSON.stringify(data));
 
-      navigate("/");
+      if (data.role === "seller") navigate("/seller");
+      else if (data.role === "admin") navigate("/admin");
+      else navigate("/home");
 
     } catch (error) {
       alert(error.response?.data?.message || "Signup Failed");
@@ -89,7 +88,7 @@ function Auth() {
             </form>
 
             <p>
-              Don’t have an account?{" "}
+              Don't have an account?{" "}
               <span className="switch-text" onClick={() => setIsFlipped(true)}>
                 Register
               </span>

@@ -29,7 +29,7 @@ const navigate = useNavigate();
       {products.map((p) => (
         <div key={p._id}>
           <h4>{p.name}</h4>
-          <p>₹ {p.price}</p>
+          <p>Rs. {p.price}</p>
            <button onClick={() => navigate(`/seller/edit-product/${p._id}`)}>
       Edit
     </button>

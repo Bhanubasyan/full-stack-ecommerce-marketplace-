@@ -65,7 +65,7 @@ return (
 
             <div className="cart-middle">
               <h4>{item.product.name}</h4>
-              <p className="price">₹ {item.product.price}</p>
+              <p className="price">Rs. {item.product.price}</p>
 
               {item.product.stock > 0 ? (
                 <p className="stock-info">
@@ -81,7 +81,7 @@ return (
                     updateQuantity(item.product._id, item.quantity - 1)
                   }
                 >
-                  −
+                  -
                 </button>
 
                 <span>{item.quantity}</span>
@@ -113,7 +113,7 @@ return (
       {/* RIGHT SIDE - SUMMARY */}
       <div className="cart-summary">
         <h3>Order Summary</h3>
-        <p className="summary-total">Total: ₹ {total}</p>
+        <p className="summary-total">Total: Rs. {total}</p>
 
         <button
           className="checkout-btn"

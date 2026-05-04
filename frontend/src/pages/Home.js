@@ -29,6 +29,7 @@ const productsSectionRef = useRef(null);
   const [category, setCategory] = useState("");
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const productRef = useRef([]);
@@ -40,12 +41,13 @@ const productsSectionRef = useRef(null);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [heroImages.length]);
 
   /* ================= FETCH PRODUCTS ================= */
   const fetchProducts = async (keyword = "", selectedCategory = "") => {
     try {
       setLoading(true);
+      setError("");
 
       let url = `/products?keyword=${keyword}`;
       if (selectedCategory) {
@@ -57,6 +59,7 @@ const productsSectionRef = useRef(null);
 
     } catch (err) {
       console.log(err);
+      setError("Unable to load products. Please check that the backend is running.");
     } finally {
       setLoading(false);
     }
@@ -171,17 +174,22 @@ const productsSectionRef = useRef(null);
         {/* PRODUCTS GRID */}
         <div className="products-grid">
 
-          {loading
-            ? Array.from({ length: 6 }).map((_, index) => (
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
                 <div className="product-card skeleton" key={index}>
                   <div className="skeleton-img"></div>
                   <div className="skeleton-text"></div>
                   <div className="skeleton-btn"></div>
                 </div>
               ))
-            : products.map((product, index) => (
+          ) : error ? (
+            <p className="products-message">{error}</p>
+          ) : products.length === 0 ? (
+            <p className="products-message">No approved products available yet.</p>
+          ) : (
+            products.map((product, index) => (
                 <div
-                  className="product-card hidden"
+                  className="product-card show"
                   key={product._id}
                   ref={(el) => (productRef.current[index] = el)}
                 >
@@ -196,13 +204,14 @@ const productsSectionRef = useRef(null);
                     <h3>{product.name}</h3>
                   </Link>
 
-                  <p className="price">₹ {product.price}</p>
+                  <p className="price">Rs. {product.price}</p>
 
                   <button onClick={() => addToCart(product._id)}>
                     Add to Cart
                   </button>
                 </div>
-              ))}
+              ))
+          )}
         </div>
       </div>
     </>

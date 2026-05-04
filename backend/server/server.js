@@ -15,14 +15,9 @@ const app = express();
    CORS CONFIGURATION
 ================================ */
 
-const allowedOrigins = [
-  "http://localhost:3000",   // Local frontend
- "https://full-stack-ecommerce-marketplace-1.onrender.com"
-];
-
 app.use(
   cors({
-    origin: true,   // allow all origins dynamically
+    origin: true,
     credentials: true,
   })
 );
@@ -48,13 +43,15 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/products", require("./routes/productRoutes"));
 app.use("/api/cart", require("./routes/cartRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/seller", require("./routes/sellerRoutes"));
 
 /* ================================
    HEALTH CHECK
 ================================ */
 
 app.get("/", (req, res) => {
-  res.send("🚀 API is running...");
+  res.send("API is running...");
 });
 
 /* ================================
@@ -75,5 +72,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🔥 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

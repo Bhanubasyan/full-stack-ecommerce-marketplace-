@@ -15,7 +15,7 @@ function SellerOrders() {
 
   const updateStatus = async (id, status) => {
     try {
-      await API.put(`/orders/${id}`, { status });
+      await API.put(`/orders/seller/${id}/status`, { status });
       fetchOrders();
     } catch (error) {
       alert("Failed to update order status");
@@ -36,7 +36,7 @@ function SellerOrders() {
         orders.map((order) => (
           <div key={order._id} style={{ border: "1px solid gray", margin: "10px", padding: "10px" }}>
             <p><strong>Order ID:</strong> {order._id}</p>
-            <p><strong>Total:</strong> ₹ {order.totalAmount}</p>
+            <p><strong>Total:</strong> Rs. {order.totalAmount}</p>
             <p><strong>Status:</strong> {order.status}</p>
 
             {order.status === "Pending" && (

@@ -16,7 +16,7 @@ function OrderSuccess() {
   return (
     <div className="success-container">
       <div className="success-card">
-        <h1>🎉 Order Placed Successfully!</h1>
+        <h1>Order Placed Successfully!</h1>
         <p>Thank you for shopping with us.</p>
         <p>You will be redirected to homepage shortly.</p>
 

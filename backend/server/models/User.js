@@ -22,8 +22,63 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["buyer", "admin","seller"],
+      enum: ["buyer", "admin", "seller"],
       default: "buyer",
+    },
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    alternatePhone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    addressLine1: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    addressLine2: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    landmark: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    city: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    state: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    postalCode: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    country: {
+      type: String,
+      trim: true,
+      default: "India",
+    },
+    businessName: {
+      type: String,
+      trim: true,
+      default: "",
     },
   },
   { timestamps: true }

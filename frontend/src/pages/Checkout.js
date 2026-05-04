@@ -52,12 +52,12 @@ function Checkout() {
             <div className="checkout-item-middle">
               <h4>{item.product.name}</h4>
               <p>
-                {item.quantity} × ₹ {item.product.price}
+                {item.quantity} x Rs. {item.product.price}
               </p>
             </div>
 
             <div className="checkout-item-right">
-              ₹ {item.product.price * item.quantity}
+              Rs. {item.product.price * item.quantity}
             </div>
           </div>
         ))}
@@ -68,7 +68,7 @@ function Checkout() {
         <h3>Order Summary</h3>
 
         <p className="summary-total">
-          Total: ₹ {total}
+          Total: Rs. {total}
         </p>
 
         <button className="place-order-btn" onClick={placeOrder}>

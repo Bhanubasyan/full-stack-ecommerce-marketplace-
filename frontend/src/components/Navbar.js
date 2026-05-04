@@ -1,17 +1,16 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
 function Navbar() {
-  const navigate = useNavigate();
   const location = useLocation();
 
   const [user, setUser] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // 🔥 Read user properly
+  // Read user from local storage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {

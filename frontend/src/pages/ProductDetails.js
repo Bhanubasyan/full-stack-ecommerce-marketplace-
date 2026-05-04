@@ -44,7 +44,7 @@ function ProductDetails() {
       <div className="product-info">
         <h2 className="product-title">{product.name}</h2>
 
-        <p className="price">₹ {product.price}</p>
+        <p className="price">Rs. {product.price}</p>
 
         <p className="desc">{product.description}</p>
 
@@ -53,7 +53,7 @@ function ProductDetails() {
           <button
             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
           >
-            −
+            -
           </button>
           <span>{quantity}</span>
           <button

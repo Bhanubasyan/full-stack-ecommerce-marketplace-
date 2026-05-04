@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const { protect, admin } = require("../middleware/authMiddleware");
-const {seller } = require("../middleware/authMiddleware");
+const { seller } = require("../middleware/authMiddleware");
 const {
   createOrder,
   getMyOrders,
   getAllOrders,
   updateOrderStatus,
- getSellerOrders,
- cancelOrder
+  getSellerOrders,
+  updateSellerOrderStatus,
+  cancelOrder
 } = require("../controllers/orderController");
 
 
@@ -17,6 +18,7 @@ router.get("/my", protect, getMyOrders);
 router.get("/", protect, admin, getAllOrders);
 router.put("/:id", protect, admin, updateOrderStatus);
 router.get("/seller", protect, seller, getSellerOrders);
+router.put("/seller/:id/status", protect, seller, updateSellerOrderStatus);
 
 router.put("/cancel/:id", protect, cancelOrder);
 

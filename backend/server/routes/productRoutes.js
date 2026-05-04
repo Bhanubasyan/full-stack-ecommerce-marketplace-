@@ -13,6 +13,8 @@ const {
   seedProducts,
   getMyProducts,
   approveProduct,
+  unapproveProduct,
+  getAdminProducts,
 } = require("../controllers/productController");
 
 
@@ -23,8 +25,14 @@ const {
 // Seed products (Admin only)
 router.post("/seed", protect, admin, seedProducts);
 
+// Get all products, including pending approval (Admin only)
+router.get("/admin/all", protect, admin, getAdminProducts);
+
 // Approve product (Admin only)
 router.put("/:id/approve", protect, admin, approveProduct);
+
+// Move approved product back to pending (Admin only)
+router.put("/:id/unapprove", protect, admin, unapproveProduct);
 
 // Update product 
 router.put("/:id", protect, updateProduct);
@@ -41,7 +49,6 @@ router.delete("/:id", protect, deleteProduct);
 router.post(
   "/",
   protect,
-  seller,
   upload.single("image"),
   createProduct
 );

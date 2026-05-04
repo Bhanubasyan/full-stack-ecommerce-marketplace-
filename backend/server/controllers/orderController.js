@@ -19,7 +19,7 @@ exports.createOrder = async (req, res) => {
 
     for (let item of cart.items) {
 
-      // 🔥 STOCK VALIDATION
+      // Stock validation
       if (item.quantity > item.product.stock) {
         return res.status(400).json({
           message: `Only ${item.product.stock} items available for "${item.product.name}".`
@@ -36,15 +36,15 @@ exports.createOrder = async (req, res) => {
       });
     }
 
-    // 🔥 CREATE ORDER
+    // Create order
     const order = await Order.create({
       user: req.user._id,
       orderItems,
       totalAmount,
     });
 
-    // 🔥 REDUCE STOCK AFTER ORDER SUCCESS
-// 🔥 REDUCE STOCK AFTER ORDER SUCCESS
+    // Reduce stock after order success
+// Reduce stock after order success
 for (let item of cart.items) {
   await Product.findByIdAndUpdate(
     item.product._id,
@@ -53,7 +53,7 @@ for (let item of cart.items) {
   );
 }
 
-    // 🔥 CLEAR CART
+    // Clear cart
     cart.items = [];
     await cart.save();
 
@@ -122,6 +122,46 @@ exports.updateOrderStatus = async (req, res) => {
   }
 };
 
+// @desc    Update status for an order that contains this seller's items
+// @route   PUT /api/orders/seller/:id/status
+// @access  Seller
+exports.updateSellerOrderStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const allowedStatuses = ["Processing", "Shipped", "Delivered"];
+
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid seller order status" });
+    }
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const hasSellerItem = order.orderItems.some((item) =>
+      item.seller?.equals(req.user._id)
+    );
+
+    if (!hasSellerItem) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    if (order.status === "Cancelled") {
+      return res.status(400).json({ message: "Cancelled order cannot be updated" });
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Get seller orders
 // @route   GET /api/orders/seller
 // @access  Seller
@@ -129,7 +169,9 @@ exports.getSellerOrders = async (req, res) => {
   try {
     const orders = await Order.find({
       "orderItems.seller": req.user._id
-    }).populate("user", "name email");
+    })
+      .populate("user", "name email")
+      .populate("orderItems.product");
 
     res.json(orders);
   } catch (error) {
